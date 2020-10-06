@@ -19,7 +19,7 @@ class Grid:
         self.grid = self._prepare_grid()
         self._configure_cells()
 
-        self.size = self.rows * self.columns
+        self.size = len(self.grid)
 
     def _prepare_grid(self):
         return [
@@ -28,23 +28,36 @@ class Grid:
             for column in range(self.columns)
         ]
 
-    def _configure_cells(self):
-        for cell in self.grid:
-            row, column = cell.get_position
-
-            if row - 1 >= 0:
-                cell.set_neighbour(NORTH, Position(row - 1, column))
-            if row + 1 < self.rows:
-                cell.set_neighbour(SOUTH, Position(row + 1, column))
-            if column - 1 >= 0:
-                cell.set_neighbour(SOUTH, Position(row, column - 1))
-            if column + 1 < self.column:
-                cell.set_neighbour(SOUTH, Position(row, column + 1))
-
-    def get_random_cell(self):
-        row = random.randInt(0, self.rows - 1)
-        column = random.randInt(0, self.columns - 1)
-        return next(
-            [cell for cell in self.grid if cell.cell_at_position(Position(row, column))]
+    def _set_neighbour(self, cell: Cell, side: str, position: Position):
+        cell.set_neighbour(
+            side, next((c for c in self.grid if c.at_position(position)), None,),
         )
 
+    def _configure_cells(self):
+        for cell in self.grid:
+            row, column = cell.get_position.row, cell.get_position.column
+            self._set_neighbour(cell, NORTH, Position(row - 1, column))
+            self._set_neighbour(cell, SOUTH, Position(row + 1, column))
+            self._set_neighbour(cell, SOUTH, Position(row, column - 1))
+            self._set_neighbour(cell, SOUTH, Position(row, column + 1))
+
+    def get_random_cell(self):
+        row = random.randint(0, self.rows - 1)
+        column = random.randint(0, self.columns - 1)
+        return next(
+            (cell for cell in self.grid if cell.at_position(Position(row, column)))
+        )
+
+    def get_per_row(self):
+        for row in range(self.rows):
+            yield sorted(
+                [cell for cell in self.grid if cell.in_row(row)],
+                key=lambda cell: cell.get_position.column,
+            )
+
+    def get_per_cell(self):
+        for cell in self.grid:
+            yield cell
+
+    def __str__(self):
+        return "\n".join([str(row) for row in self.get_per_row()])

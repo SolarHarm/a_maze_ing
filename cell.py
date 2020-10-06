@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List, Optional, Dict
+from typing import Iterable, List, Optional, Dict
 
 
 class NeighbourError(Exception):
@@ -23,7 +23,7 @@ class Cell:
         self._position: Position = position
         self._linked: List[Cell] = []
 
-        self._neighbours: Dict[str, Position]
+        self._neighbours: Dict[str, "Cell"] = {}
 
     @property
     def get_position(self):
@@ -45,14 +45,24 @@ class Cell:
     def is_linked_with(self, other_cell: "Cell"):
         return other_cell in self._linked
 
-    def get_neighbours(self):
+    def get_neighbours(self) -> Iterable["Cell"]:
         return self._neighbours.values()
 
-    def set_neighbour(self, side: str, position: Position):
+    def set_neighbour(self, side: str, cell: "Cell") -> None:
+        # replace with typecheck enum
         if side not in ["north", "east", "south", "west"]:
             raise NeighbourError("Not in the windroos")
 
-        self._neighbours[side] = position
+        self._neighbours[side] = cell
 
-    def cell_at_position(self, position: Position) -> bool:
+    def at_position(self, position: Position) -> bool:
         return self._position == position
+
+    def in_row(self, row: int) -> bool:
+        return row == self._position.row
+
+    def __str__(self):
+        return f"Cell at ({self._position.row},{self._position.column})"
+
+    def __repr__(self):
+        return f"Cell at ({self._position.row},{self._position.column})"
