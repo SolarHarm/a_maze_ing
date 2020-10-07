@@ -1,5 +1,6 @@
+from binary_tree import BinaryTree
 from cell import Cell, Position
-from grid import Grid, NORTH
+from grid import Grid, NORTH, EAST, SOUTH, WEST
 
 import unittest
 
@@ -34,8 +35,18 @@ class TestCell(unittest.TestCase):
 
     def test_set_neighbours(self):
         self.cell.set_neighbour(NORTH, self.other_cell)
+        self.cell.set_neighbour(EAST, self.other_cell)
+        self.cell.set_neighbour(SOUTH, self.other_cell)
+        self.cell.set_neighbour(WEST, self.other_cell)
 
-        self.assertEqual(list(self.cell.get_neighbours()), [self.other_cell])
+        self.assertEqual(
+            list(self.cell.get_neighbours().values()),
+            [self.other_cell, self.other_cell, self.other_cell, self.other_cell],
+        )
+        self.assertEqual(self.cell.get_neighbour(NORTH), self.other_cell)
+        self.assertEqual(self.cell.get_neighbour(EAST), self.other_cell)
+        self.assertEqual(self.cell.get_neighbour(SOUTH), self.other_cell)
+        self.assertEqual(self.cell.get_neighbour(WEST), self.other_cell)
 
     def test_cell_at_position(self):
         position = Position(self.row, self.column)
@@ -57,7 +68,7 @@ class TestGrid(unittest.TestCase):
 
     def test_prepare_grid(self):
         self.assertEqual(
-            str(self.grid),
+            repr(self.grid),
             (
                 "[Cell at (0,0), Cell at (0,1), Cell at (0,2)]\n"
                 "[Cell at (1,0), Cell at (1,1), Cell at (1,2)]"
@@ -76,6 +87,18 @@ class TestGrid(unittest.TestCase):
         for col, cell in enumerate(next(rows)):
             self.assertEqual(cell.get_position.row, 1)
             self.assertEqual(cell.get_position.column, col)
+
+    def test_grid_string(self):
+        pass
+
+
+class TestBinaryTree(unittest.TestCase):
+    def setUp(self) -> None:
+        grid = Grid(10, 10)
+        self.bt = BinaryTree(grid)
+
+    def test_create(self) -> None:
+        assert self.bt.create() != None
 
 
 if __name__ == "__main__":
