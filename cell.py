@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Iterable, List, Optional, Dict
+from typing import Iterable, List, Dict, Optional
 
 
 class NeighbourError(Exception):
@@ -45,8 +45,11 @@ class Cell:
     def is_linked_with(self, other_cell: "Cell"):
         return other_cell in self._linked
 
-    def get_neighbours(self) -> Iterable["Cell"]:
-        return self._neighbours.values()
+    def get_neighbours(self) -> Dict[str, "Cell"]:
+        return self._neighbours
+
+    def get_neighbour(self, side: str) -> Optional["Cell"]:
+        return self._neighbours.get(side, None)
 
     def set_neighbour(self, side: str, cell: "Cell") -> None:
         # replace with typecheck enum
