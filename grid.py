@@ -38,8 +38,8 @@ class Grid:
             row, column = cell.get_position.row, cell.get_position.column
             self._set_neighbour(cell, NORTH, Position(row - 1, column))
             self._set_neighbour(cell, SOUTH, Position(row + 1, column))
-            self._set_neighbour(cell, SOUTH, Position(row, column - 1))
-            self._set_neighbour(cell, SOUTH, Position(row, column + 1))
+            self._set_neighbour(cell, WEST, Position(row, column - 1))
+            self._set_neighbour(cell, EAST, Position(row, column + 1))
 
     def get_random_cell(self):
         row = random.randint(0, self.rows - 1)
@@ -59,5 +59,32 @@ class Grid:
         for cell in self.grid:
             yield cell
 
-    def __str__(self):
+    def __repr__(self):
         return "\n".join([str(row) for row in self.get_per_row()])
+
+    def __str__(self):
+        # Build ascii art
+        # +---+---+---+
+        # |   |   |   |
+        # +---+---+---+
+        # |   |   |   |
+        # +---+---+---+
+        #  We start with '+' + '---+' * cols
+        #  each row start with '|' + ['   ' + ' ' || '|'] -> for each cell
+        #  each row also has   '+' + ['---+'] -> for each cell
+
+        top_s = "+" + "---+" * self.columns + "\n"
+        for row in self.get_per_row():
+            row_s = "|"
+            bottom_s = ""
+            for cell in row:
+                row_s += "   " + (
+                    " " if cell.is_linked_with(cell.get_neighbour(EAST)) else "|"
+                )
+                bottom_s += "+" + (
+                    "   " if cell.is_linked_with(cell.get_neighbour(SOUTH)) else "---"
+                )
+            top_s += row_s + "\n" + bottom_s + "+\n"
+
+        return top_s
+
