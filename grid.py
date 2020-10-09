@@ -1,5 +1,6 @@
 from cell import Cell, Position
 import random
+from typing import List
 
 NORTH = "north"
 EAST = "east"
@@ -21,6 +22,12 @@ class Grid:
 
         self.size = len(self.grid)
 
+        self.open_h = "   "
+        self.open_v = " "
+        self.corner = "+"
+        self.wall_v = "|"
+        self.wall_h = "---"
+
     def _prepare_grid(self):
         return [
             Cell(Position(row, column))
@@ -28,7 +35,7 @@ class Grid:
             for column in range(self.columns)
         ]
 
-    def _set_neighbour(self, cell: Cell, side: str, position: Position):
+    def _set_neighbour(self, cell: Cell, side: str, position: Position) -> None:
         cell.set_neighbour(
             side, next((c for c in self.grid if c.at_position(position)), None,),
         )
@@ -38,8 +45,8 @@ class Grid:
             row, column = cell.get_position.row, cell.get_position.column
             self._set_neighbour(cell, NORTH, Position(row - 1, column))
             self._set_neighbour(cell, SOUTH, Position(row + 1, column))
-            self._set_neighbour(cell, SOUTH, Position(row, column - 1))
-            self._set_neighbour(cell, SOUTH, Position(row, column + 1))
+            self._set_neighbour(cell, WEST, Position(row, column - 1))
+            self._set_neighbour(cell, EAST, Position(row, column + 1))
 
     def get_random_cell(self):
         row = random.randint(0, self.rows - 1)
@@ -48,7 +55,7 @@ class Grid:
             (cell for cell in self.grid if cell.at_position(Position(row, column)))
         )
 
-    def get_per_row(self):
+    def get_per_row(self) -> List["Cell"]:
         for row in range(self.rows):
             yield sorted(
                 [cell for cell in self.grid if cell.in_row(row)],
@@ -59,5 +66,21 @@ class Grid:
         for cell in self.grid:
             yield cell
 
-    def __str__(self):
+    def __repr__(self):
         return "\n".join([str(row) for row in self.get_per_row()])
+
+    def __str__(self):
+        top_s = self.corner + (self.wall_h + self.corner) * self.columns + "\n"
+        for row in self.get_per_row():
+            row_s = self.wall_v
+            bottom_s = self.corner
+            for cell in row:
+                open_east = cell.is_linked_with(cell.get_neighbour(EAST))
+                with_south = cell.is_linked_with(cell.get_neighbour(SOUTH))
+                row_s += self.open_h + (self.open_v if open_east else self.wall_v)
+                bottom_s += (self.open_h if with_south else self.wall_h) + self.corner
+
+            top_s += "\n".join([row_s, bottom_s, ""])
+
+        return top_s
+
