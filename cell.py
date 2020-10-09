@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Iterable, List, Dict, Optional
+from typing import List, Dict, Optional
 
 
 class NeighbourError(Exception):
