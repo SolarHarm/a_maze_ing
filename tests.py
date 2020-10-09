@@ -1,3 +1,4 @@
+from sidewinder import Sidewinder
 from binary_tree import BinaryTree
 from cell import Cell, Position
 from grid import Grid, NORTH, EAST, SOUTH, WEST
@@ -89,7 +90,11 @@ class TestGrid(unittest.TestCase):
             self.assertEqual(cell.get_position.column, col)
 
     def test_grid_string(self):
-        pass
+        print(self.grid)
+
+    def test_uneven_grid(self):
+        grid = Grid(10, 11)
+        print(grid)
 
 
 class TestBinaryTree(unittest.TestCase):
@@ -98,7 +103,16 @@ class TestBinaryTree(unittest.TestCase):
         self.bt = BinaryTree(grid)
 
     def test_create(self) -> None:
-        assert self.bt.create() != None
+        print("\n" + self.bt.create())
+
+
+class TestSidewinder(unittest.TestCase):
+    def setUp(self) -> None:
+        grid = Grid(10, 11)
+        self.sw = Sidewinder(grid)
+
+    def test_create(self):
+        print("\n" + self.sw.create())
 
 
 if __name__ == "__main__":
