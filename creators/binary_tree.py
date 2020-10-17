@@ -1,4 +1,4 @@
-from grid import Grid, NORTH, EAST
+from generics.grid import Grid, NORTH, EAST
 from random import choice as randChoice
 
 

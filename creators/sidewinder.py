@@ -1,5 +1,5 @@
-from cell import Cell
-from grid import Grid, EAST, NORTH
+from generics.cell import Cell
+from generics.grid import Grid, EAST, NORTH
 from random import randint, choice
 from typing import List
 

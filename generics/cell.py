@@ -69,3 +69,10 @@ class Cell:
 
     def __repr__(self):
         return f"Cell at ({self._position.row},{self._position.column})"
+
+    def has_wall_at(self, side: str):
+        cell = self.get_neighbour(side)
+        if cell and self.is_linked_with(cell):
+            return False
+
+        return True

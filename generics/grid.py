@@ -1,6 +1,9 @@
-from cell import Cell, Position
+from generics.drawer import Drawer, Point
 import random
 from typing import List
+
+
+from generics.cell import Cell, Position
 
 NORTH = "north"
 EAST = "east"
@@ -19,15 +22,34 @@ class Grid:
 
         self.grid = self._prepare_grid()
         self._configure_cells()
-
         self.size = len(self.grid)
 
+        # TODO Allow to change
         self.open_h = "   "
         self.open_v = " "
         self.corner = "+"
         self.wall_v = "|"
         self.wall_h = "---"
 
+    def get_random_cell(self):
+        row = random.randint(0, self.rows - 1)
+        column = random.randint(0, self.columns - 1)
+        return next(
+            (cell for cell in self.grid if cell.at_position(Position(row, column)))
+        )
+
+    def get_per_row(self) -> List["Cell"]:
+        for row in range(self.rows):
+            yield sorted(
+                [cell for cell in self.grid if cell.in_row(row)],
+                key=lambda cell: cell.get_position.column,
+            )
+
+    def get_per_cell(self):
+        for cell in self.grid:
+            yield cell
+
+    # Private below don't call directly
     def _prepare_grid(self):
         return [
             Cell(Position(row, column))
@@ -48,33 +70,16 @@ class Grid:
             self._set_neighbour(cell, WEST, Position(row, column - 1))
             self._set_neighbour(cell, EAST, Position(row, column + 1))
 
-    def get_random_cell(self):
-        row = random.randint(0, self.rows - 1)
-        column = random.randint(0, self.columns - 1)
-        return next(
-            (cell for cell in self.grid if cell.at_position(Position(row, column)))
-        )
-
-    def get_per_row(self) -> List["Cell"]:
-        for row in range(self.rows):
-            yield sorted(
-                [cell for cell in self.grid if cell.in_row(row)],
-                key=lambda cell: cell.get_position.column,
-            )
-
-    def get_per_cell(self):
-        for cell in self.grid:
-            yield cell
-
     def __repr__(self):
         return "\n".join([str(row) for row in self.get_per_row()])
 
     def __str__(self):
-        top_s = self.corner + (self.wall_h + self.corner) * self.columns + "\n"
+        top_s = "\n " + self.corner + (self.wall_h + self.corner) * self.columns + "\n"
         for row in self.get_per_row():
-            row_s = self.wall_v
-            bottom_s = self.corner
+            row_s = f"{row[0].get_position.row}{self.wall_v}"
+            bottom_s = f" {self.corner}"
             for cell in row:
+                self.open_h = f" {cell.get_position.column} "
                 open_east = cell.is_linked_with(cell.get_neighbour(EAST))
                 with_south = cell.is_linked_with(cell.get_neighbour(SOUTH))
                 row_s += self.open_h + (self.open_v if open_east else self.wall_v)
@@ -84,3 +89,27 @@ class Grid:
 
         return top_s
 
+    def to_png(self):
+        cell_dim = 10
+        height_px = self.rows * cell_dim + 1
+        width_px = self.columns * cell_dim + 1
+
+        drawer = Drawer(width_px, height_px)
+        for cell in self.get_per_cell():
+            x, y = cell.get_position.column * cell_dim, cell.get_position.row * cell_dim
+
+            tl = Point(x, y)
+            tr = Point(x + cell_dim, y)
+            bl = Point(x, y + cell_dim)
+            br = Point(x + cell_dim, y + cell_dim)
+
+            if cell.has_wall_at(NORTH):
+                drawer.paint_line(tl, tr)
+            if cell.has_wall_at(EAST):
+                drawer.paint_line(tr, br)
+            if cell.has_wall_at(SOUTH):
+                drawer.paint_line(bl, br)
+            if cell.has_wall_at(WEST):
+                drawer.paint_line(tl, bl)
+
+        drawer.save_to_png("test.png")
