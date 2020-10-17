@@ -3,7 +3,7 @@ from typing import List
 
 import png
 
-from cell import Cell, Position
+from generics.cell import Cell, Position
 
 NORTH = "north"
 EAST = "east"

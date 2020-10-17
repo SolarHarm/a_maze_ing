@@ -1,5 +1,5 @@
 import unittest
-from drawer import Drawer, OutsideCanvasError, Point
+from generics.drawer import Drawer, OutsideCanvasError, Point
 
 
 class TestDrawer(unittest.TestCase):

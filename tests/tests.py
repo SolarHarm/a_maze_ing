@@ -1,7 +1,7 @@
-from sidewinder import Sidewinder
-from binary_tree import BinaryTree
-from cell import Cell, Position
-from grid import Grid, NORTH, EAST, SOUTH, WEST
+from creators.sidewinder import Sidewinder
+from creators.binary_tree import BinaryTree
+from generics.cell import Cell, Position
+from generics.grid import Grid, NORTH, EAST, SOUTH, WEST
 
 import unittest
 
