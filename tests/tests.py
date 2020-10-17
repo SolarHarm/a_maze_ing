@@ -96,9 +96,6 @@ class TestGrid(unittest.TestCase):
         grid = Grid(10, 11)
         print(grid)
 
-    def test_to_png(self):
-        Grid(10, 10).to_png()
-
 
 class TestBinaryTree(unittest.TestCase):
     def setUp(self) -> None:
