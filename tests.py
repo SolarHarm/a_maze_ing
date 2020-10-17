@@ -96,6 +96,9 @@ class TestGrid(unittest.TestCase):
         grid = Grid(10, 11)
         print(grid)
 
+    def test_to_png(self):
+        Grid(10, 10).to_png()
+
 
 class TestBinaryTree(unittest.TestCase):
     def setUp(self) -> None:
@@ -103,16 +106,19 @@ class TestBinaryTree(unittest.TestCase):
         self.bt = BinaryTree(grid)
 
     def test_create(self) -> None:
-        print("\n" + self.bt.create())
+        grid = self.bt.create()
+        print(grid)
+        grid.to_png(name="testBT")
 
 
 class TestSidewinder(unittest.TestCase):
     def setUp(self) -> None:
-        grid = Grid(10, 11)
+        grid = Grid(10, 10)
         self.sw = Sidewinder(grid)
 
     def test_create(self):
-        print("\n" + self.sw.create())
+        # print(self.sw.create())
+        pass
 
 
 if __name__ == "__main__":
