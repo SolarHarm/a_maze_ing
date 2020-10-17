@@ -10,10 +10,14 @@ The binary tree carves out a maze, by going through each cell and randomly
 removes the NORTH or EAST wall.
 
 ```python
-from grid import Grid
-from binary_tree import BinaryTree
+from generics.grid import Grid
+from creators.binary_tree import BinaryTree
 
-grid = Grid(10,10)
+grid = Grid(100,100)
 bt = BinaryTree(grid)
 maze = bt.create()
+maze.to_png()
+
+![alt text](test.png "Should show an test maze")
+
 ```

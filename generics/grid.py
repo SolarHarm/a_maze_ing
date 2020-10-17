@@ -95,7 +95,6 @@ class Grid:
         width_px = self.columns * cell_dim + 1
 
         drawer = Drawer(width_px, height_px)
-        print("here")
         for cell in self.get_per_cell():
             x, y = cell.get_position.column * cell_dim, cell.get_position.row * cell_dim
 
@@ -112,7 +111,5 @@ class Grid:
                 drawer.paint_line(bl, br)
             if cell.has_wall_at(WEST):
                 drawer.paint_line(tl, bl)
-
-        print("here alreadu")
 
         drawer.save_to_png("test.png")
