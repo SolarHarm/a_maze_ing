@@ -66,12 +66,16 @@ class Drawer:
     def point_on_canvas(self, p: Point, exception_raised: bool = True):
         if p.x >= self._width:
             if exception_raised:
-                raise OutsideCanvasError("Point x value outside canvas")
+                raise OutsideCanvasError(
+                    f"Point x {p.x} value outside canvas {self._width}"
+                )
             return False
 
         if p.y >= self._height:
             if exception_raised:
-                raise OutsideCanvasError("Point y value outside canvas")
+                raise OutsideCanvasError(
+                    f"Point y {p.y} value outside canvas {self._height}"
+                )
             return False
 
         return True
@@ -94,14 +98,14 @@ class Drawer:
         if x1 > x2:
             x1, x2 = x2, x1
 
-        for x in range(x1, x2):
+        for x in range(x1, x2 + 1):
             self._paint_point(x, y)
 
     def _paint_vertical_line(self, y1: int, y2: int, x: int):
         if y1 > y2:
             y1, y2 = y2, y1
 
-        for y in range(y1, y2):
+        for y in range(y1, y2 + 1):
             self._paint_point(x, y)
 
     def _paint_point(self, x: int, y: int, color: int = None):

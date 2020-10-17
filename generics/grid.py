@@ -1,7 +1,7 @@
+from generics.drawer import Drawer, Point
 import random
 from typing import List
 
-import png
 
 from generics.cell import Cell, Position
 
@@ -49,7 +49,7 @@ class Grid:
         for cell in self.grid:
             yield cell
 
-    # Private below dont call directly
+    # Private below don't call directly
     def _prepare_grid(self):
         return [
             Cell(Position(row, column))
@@ -88,3 +88,31 @@ class Grid:
             top_s += "\n".join([row_s, bottom_s, ""])
 
         return top_s
+
+    def to_png(self):
+        cell_dim = 10
+        height_px = self.rows * cell_dim + 1
+        width_px = self.columns * cell_dim + 1
+
+        drawer = Drawer(width_px, height_px)
+        print("here")
+        for cell in self.get_per_cell():
+            x, y = cell.get_position.column * cell_dim, cell.get_position.row * cell_dim
+
+            tl = Point(x, y)
+            tr = Point(x + cell_dim, y)
+            bl = Point(x, y + cell_dim)
+            br = Point(x + cell_dim, y + cell_dim)
+
+            if cell.has_wall_at(NORTH):
+                drawer.paint_line(tl, tr)
+            if cell.has_wall_at(EAST):
+                drawer.paint_line(tr, br)
+            if cell.has_wall_at(SOUTH):
+                drawer.paint_line(bl, br)
+            if cell.has_wall_at(WEST):
+                drawer.paint_line(tl, bl)
+
+        print("here alreadu")
+
+        drawer.save_to_png("test.png")

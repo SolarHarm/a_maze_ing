@@ -90,11 +90,18 @@ class TestGrid(unittest.TestCase):
             self.assertEqual(cell.get_position.column, col)
 
     def test_grid_string(self):
-        print(self.grid)
+        # print(self.grid)
+        pass
 
     def test_uneven_grid(self):
         grid = Grid(10, 11)
-        print(grid)
+        # print(grid)
+
+    def test_to_png(self):
+        bt = BinaryTree(Grid(75, 50))
+        grid = bt.create()
+
+        grid.to_png()
 
 
 class TestBinaryTree(unittest.TestCase):
@@ -104,8 +111,8 @@ class TestBinaryTree(unittest.TestCase):
 
     def test_create(self) -> None:
         grid = self.bt.create()
-        print(grid)
-        grid.to_png(name="testBT")
+        # print(grid)
+        # grid.to_png(name="testBT")
 
 
 class TestSidewinder(unittest.TestCase):
